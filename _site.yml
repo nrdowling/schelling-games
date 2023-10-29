@@ -1,0 +1,8 @@
+name: "schelling-games"
+navbar:
+  title: "Schelling Games"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html

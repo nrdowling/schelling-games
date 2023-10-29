@@ -1,0 +1,384 @@
+---
+title: "Schelling Games"
+---
+
+```{r load-packages, include=FALSE}
+#Load packages that we can assume (for d2m) we all have installed
+library(tidyverse)
+
+#TODO: MAKE THESE REQUIRED!
+library(googlesheets4)
+library(kableExtra)
+library(data.table)
+library(lubridate)
+library(scales)
+library(ggsci)
+```
+
+```{r preferences, include=FALSE}
+# Seed for random number generation
+set.seed(6788)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+
+# Set theme for plots
+theme_set(theme_bw())
+
+```
+
+```{r import-raw, include=FALSE}
+# 2 OPTIONS FOR DATA READ-IN:
+
+# 1. Read responses from Google sheets
+# PRO: Most current data
+# CON: Requires appropriate permissions for the google sheet and maintaining settings in the googlesheets4 pkg
+
+# responses_raw <- read_sheet("https://docs.google.com/spreadsheets/d/1A9KzDRgiU6VU60b87zNRP7y0YI1hsRRtCvYG_BXvayY/edit?resourcekey#gid=1333159890")
+
+# 2. Read intermediary dataset (includes responses from Spring 2020 & Winter 2023)
+# PRO: Data can be publicly accessible and stored in the GitHub repo as a relatively small csv file
+# CON: May not include recent response data
+
+responses_raw <- read_csv("data/responses_raw.csv")
+
+# Note: last 3 columns indicate when the corresponding response is clearly a misinterpretation of the question
+# These errors were manually added based purely on human reasoning and healthy skepticism 
+
+```
+
+```{r setup, include = FALSE}
+
+# SOURCE FILES AS NEEDED
+source("source/functions.R")
+source("source/setup.R")
+
+```
+
+Thomas Schelling introduced the concept of "focal points" in *The Strategy of Conflict* with the intention of expanding the contemporary perspectives of game theory to include cooperative, not just competitive, games in human decision making **SCHELLING**. Though his work certainty proved influential in this regard, concepts of focal points and coordination games have found relevance well beyond game theory and or economics as a whole. From improvisational music **CANONNE** to urban planning **RONDINELLI**, from human-computer interfacing **WONG ET AL** to linguistic anthropology **BROWN AND LEVINSON**, from social stereotyping **YOON & HOLLINGSHEAD** to online gaming **ROSS AND COLLISTER**, elements of Schelling's framework of coordinated decision-making seem ubiquitous.
+
+
+
+
+
+
+
+## Survey design
+
+Schelling's classroom survey asked students questions challenging them to ambiguously "win" a game by coordinating with a stranger. Famously, he asked where and when the participants would meet a stranger in New York City without any prior communication. Additionally, the survey included a series of questions encouraging convergence on a response in more "game-like" circumstances: guessing a number, flipping a coin, etc.
+
+This survey is in essence an abbreviated version of Shelling's. It includes a selection of the "game-like" questions taken directly from Schelling's survey. Because this survey was conducted at the University of Chicago, the where-and-when question asks about meeting a stranger in Chicago rather than New York City. The survey additionally includs two follow-up questions that were not included in Schelling's data, changing the interpersonal context between the participant and hypothetical partner.  
+
+
+## Data analysis
+
+Responses have been cleaned to account for predictable variations in how individuals input popular responses -- e.g., "the reg", "Regenstein", and "In the Reg." are all reported as "The Reg." Ambiguous responses (e.g., "the library") are left ambiguous.
+
+### Exclusions
+
+<!-- TODO: add inline refs for exclusion numbers  -->A total of <span color="red">NUMBER GOES HERE</span> responses to the "meetup location" questions were excluded (out of <span color="red">NUMBER GOES HERE</span> total) or re-coded as "Other".
+
+Responses that indicate clear misunderstanding of the question are excluded. These primarily consisted of responses in the "meeting a stranger" or "meeting a student" questions. Since these questions specify that the other party is unknown to the respondent, responses should not assume prior familiarity or experience with the other party, for example "their house", "the last place we last met", "where we usually see each other", or "where you expect them to be at a certain time."
+
+Responses to the meetup location questions were coded as "Other" if they included multiple locations without rankings (e.g., "pret or hutch"), were overly vague (e.g., "a major center within the city that everyone knows about"), or fanciful/impossible (e.g., "THE MOON!").
+
+# Survey Results
+
+## Managing to meet
+
+
+
+
+### Meeting a stranger
+
+**You are meeting a stranger in Chicago.** You both know that you need to meet each other today, but you haven't agreed on a place or a time and you have no means of communication. *Remember, you cannot communicate with them now or previously in any way!*
+
+<span style="color:blue">**WHERE** do you go to meet them?</span>
+
+```{r str-where, include=FALSE}
+# Select stranger meetup column and add cleaning/grouping
+# Making it into a data.table allows for easy in-text references (it will be both a df and a dt)
+
+str_meetup <- data.table(clean_meetup(responses, "str_where", "str_error"))
+
+```
+
+```{r str-visualize-where, echo=FALSE}
+
+# How many levels to display in legend?
+plot_meetup(str_meetup, "str_where_clean", title="WHERE do you meet a STRANGER in Chicago?")
+
+# ?Q?: Since the legend only shows the top n meetup locations (in order), it can be unintuitive what "Other" or "Other (something)" would mean: "Other residence?" Other than what? (other than dorms!). How could you make this more intuitive/understandable?
+
+```
+
+
+
+**Response breakdown:**
+
+```{r str-kable, echo=FALSE, paged.print=TRUE}
+# Show kable of all (cleaned) responses with raw counts and percent
+kbl_responses(str_meetup, "str_where_clean")
+
+```
+
+The most common response for where to meet a *stranger* in Chicago was `r levels(str_meetup$str_where_clean)[1]`, with `r str_meetup[str_where_clean==str_meetup$str_where_clean[1],.N]` responses (`r round((str_meetup[str_where_clean==str_meetup$str_where_clean[1],.N]/str_meetup[,.N])*100,2)`%). <!-- These in-text refs are verbose, but they are entirely data-dependent! If suddenly the Sears tower got way more popular than the Bean, this text would reflect that without any changes. -->
+
+Common responses of Chicago landmarks included the Bean/Cloudgate ($N$ = `r str_meetup[str_where_clean=="The Bean", .N]`), Millennium/Grant Park ($N$ = `r str_meetup[str_where_clean=="Millennium/Grant Park", .N]`), and the Sears/Willis Tower ($N$ = `r str_meetup[str_where_clean=="Sears/Willis Tower", .N]`).
+
+```{r str-others-response-factors, include=FALSE}
+str_others <- Filter(function(x) x %ilike% "Other", levels(str_meetup$str_where_clean))
+
+```
+
+All responses grouped into "Other" categories (`r paste(str_others, collapse=", ")`):
+
+```{r str-other-response-list, echo=FALSE}
+
+filter(str_meetup, str_where_clean %in% str_others) %>% 
+    mutate(str_where = factor(str_where)) %>% 
+    pull(str_where) %>% 
+    levels() %>% 
+    kable(col.names = c("Other responses"))
+```
+
+
+
+
+
+<span style="color:blue">**WHAT TIME** do you go to meet them?</span>
+
+```{r str-visualize-when, echo=FALSE, warning=FALSE}
+
+# Define limits for x-axis time scale
+# This visually centers 12pm and makes it show even axis ticks instead of odd (since we want 12 to be clear)
+lims <- as.POSIXct(strptime(c("1899-12-29 18:00:00","1899-12-30 18:00:00"), format = "%Y-%m-%d %H:%M:%S")) 
+
+ggplot(filter(responses, !is.na(str_when)), aes(x=str_when)) + 
+    geom_histogram(binwidth=360) +
+    #geom_density(adjust=1/5) +
+    #geom_dotplot() +
+    scale_x_datetime(labels = date_format("%H:%M"),
+                     date_breaks = "2 hours",
+                     limits = lims) +
+    theme(axis.text.x = element_text(angle=45)) +
+    theme_minimal() +
+    labs(x = "TIME OF DAY",
+         title = "Meeting a STRANGER in Chicago, WHEN do you go?",
+         subtitle = paste0(nrow(filter(responses,!is.na(str_when))), " total responses"))
+    
+
+```
+
+#### Time breakdown...
+
+<span style="color:red">`r round((love_connections/length(str_times))*100,2)`%</span> (`r love_connections` out of `r length(str_times)`) of people chose to meet at **exactly `r format(most_pop_time, "%H:%M")`.**
+
+`r round(((on_the_hour - love_connections)/length(str_times))*100,2)`% chose another time "on the hour" (but not `r format(most_pop_time, "%H:%M")`).
+
+`r round((on_the_thirty/length(str_times))*100,2)`% chose a time "on the half hour."
+
+Just `r round((on_anything_else/length(str_times))*100,2)`% (`r on_anything_else` lonely `r lonely_hearts`) chose anything else.
+
+### Meeting an unfamiliar student
+
+**You are meeting another UChicago student who you have not met before.** You both know that you are both UChicago students and that you should meet today, but you haven't agreed on a meeting location and you have no means of communication. 
+
+<span style="color:blue">**Where** do you go to meet them?</span>
+
+```{r student-where, include=FALSE}
+
+student_meetup <- data.table(clean_meetup(responses, "student_where", "student_error"))
+
+```
+
+```{r student-visualize-where, echo=FALSE}
+
+plot_meetup(student_meetup, "student_where_clean", title="WHERE do you meet an UNFAMILIAR UCHICAGO STUDENT in Chicago?")
+```
+
+
+**Response breakdown:**
+
+```{r student-kable, echo=FALSE, paged.print=TRUE}
+# Show kable of all (cleaned) responses with raw counts and percent
+kbl_responses(student_meetup, "student_where_clean")
+
+```
+
+
+The most common response for where to meet an *unknown UChicago student* in Chicago was `r levels(student_meetup$student_where_clean)[1]`, with `r student_meetup[student_where_clean==student_meetup$student_where_clean[1],.N]` responses (`r round((student_meetup[student_where_clean==student_meetup$student_where_clean[1],.N]/student_meetup[,.N])*100,2)`%). By comparison, `r ifelse(str_meetup[str_where_clean==student_meetup$student_where_clean[1],.N]==0, "no respondents", paste0("only ", str_meetup[str_where_clean==student_meetup$student_where_clean[1],.N], " respondents (", round((str_meetup[str_where_clean==student_meetup$student_where_clean[1],.N]/str_meetup[,.N])*100,2), "%)"))` chose to meet a stranger at `r levels(student_meetup$student_where_clean)[1]`.
+
+While `r levels(str_meetup$str_where_clean)[1]` was the most common response for where to meet a *stranger* in Chicago, `r ifelse(student_meetup[student_where_clean==str_meetup$str_where_clean[1],.N]==0, "no respondents", paste0("only ", student_meetup[student_where_clean==str_meetup$str_where_clean[1],.N], " respondents (", round((student_meetup[student_where_clean==str_meetup$str_where_clean[1],.N]/student_meetup[,.N])*100,2), "%)"))` chose to meet an unfamiliar UChicago student at `r levels(str_meetup$str_where_clean)[1]`.
+
+```{r student-other-response-factors, echo=FALSE}
+student_others <- c(Filter(function(x) x %ilike% "Other", levels(student_meetup$student_where_clean)), "Dorms")
+
+```
+
+
+**All responses grouped into "Other" or general categories (`r paste(student_others, collapse=", ")`):**
+
+```{r student-other-response-list, echo=FALSE}
+
+
+filter(student_meetup, student_where_clean %in% student_others) %>% 
+    mutate(student_where = factor(student_where)) %>% 
+    pull(student_where) %>% 
+    levels() %>% 
+    kable(col.names = c("Other responses"))
+```
+
+
+### Meeting your UChicago friend
+
+**You are meeting your closest friend at UChicago.** You haven't agreed on a meeting location and you have no means of communication. 
+
+<span style="color:blue">**Where** do you go to meet them?</span>
+
+```{r friend-where, include=FALSE}
+
+friend_meetup <- data.table(clean_meetup(responses, "friend_where", "friend_error"))
+
+```
+
+
+```{r friend-visualize-where, echo=FALSE}
+
+plot_meetup(friend_meetup, "friend_where_clean", title="WHERE do you meet your CLOSEST UCHICAGO FRIEND in Chicago?")
+
+```
+
+
+**Response breakdown:**
+
+```{r friend-kable, echo=FALSE, paged.print=TRUE}
+# Show kable of all (cleaned) responses with raw counts and percent
+kbl_responses(friend_meetup, "friend_where_clean")
+
+```
+
+
+The most common response for where to meet a close UChicago friend in Chicago was `r levels(friend_meetup$friend_where_clean)[1]`, with `r friend_meetup[friend_where_clean==friend_meetup$friend_where_clean[1],.N]` responses (`r round((friend_meetup[friend_where_clean==friend_meetup$friend_where_clean[1],.N]/friend_meetup[,.N])*100,2)`%). By comparison, `r ifelse(str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N]==0, "no respondents", paste0("only ", str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N], " respondents (", round((str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N]/str_meetup[,.N])*100,2), "%)"))` chose to meet a stranger at `r levels(friend_meetup$friend_where_clean)[1]` and `r ifelse(student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N]==0, "no respondents", paste0("only ", student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N], " respondents (", round((student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N]/student_meetup[,.N])*100,2), "%)"))` chose to meet a stranger at `r levels(friend_meetup$friend_where_clean)[1]`.
+
+While `r levels(str_meetup$str_where_clean)[1]` was the most common response for where to meet a *stranger* in Chicago, `r ifelse(friend_meetup[friend_where_clean==str_meetup$str_where_clean[1],.N]==0, "no respondents", paste0("only ", friend_meetup[friend_where_clean==str_meetup$str_where_clean[1],.N], " respondents (", round((friend_meetup[friend_where_clean==str_meetup$str_where_clean[1],.N]/friend_meetup[,.N])*100,2), "%)"))` chose to meet a close UChicago friend at `r levels(str_meetup$str_where_clean)[1]`.
+
+`r levels(student_meetup$student_where_clean)[1]` was the most common response for where to meet an *unfamiliar UChicago student* in Chicago, but `r ifelse(friend_meetup[friend_where_clean==student_meetup$student_where_clean[1],.N]==0, "no respondents", paste0("only ", friend_meetup[friend_where_clean==student_meetup$student_where_clean[1],.N], " respondents (", round((friend_meetup[friend_where_clean==student_meetup$student_where_clean[1],.N]/friend_meetup[,.N])*100,2), "%)"))` chose to meet a close UChicago friend at `r levels(student_meetup$student_where_clean)[1]`.
+
+```{r friend-other-response-factors, echo=FALSE}
+
+friend_others <- c(Filter(function(x) x %ilike% "Other", levels(friend_meetup$friend_where_clean)), "Dorms", "Recent meeting location")
+
+```
+
+
+**All responses grouped into "Other" or general categories (`r paste(friend_others, collapse=", ")`):**
+
+```{r friend-other-response-list, echo=FALSE, message=FALSE, warning=FALSE}
+
+filter(friend_meetup, friend_where_clean %in% friend_others) %>% 
+    mutate(friend_where = factor(friend_where)) %>% 
+    pull(friend_where) %>% 
+    levels() %>% 
+    kable(col.names = c("Other responses"))
+```
+
+
+## Coins
+
+```{r anon-responses, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+responses_anon <- responses %>% 
+    select(coin_same, coin_different, number_0to10, number_selection, number_big) %>% 
+    drop_na()
+    
+```
+
+You and an anonymous partner need to choose heads or tails. If you both choose the **SAME** answer, you both win. Which do you choose?
+
+...If you both choose a **DIFFERENT** answer, you both win. Which do you choose?
+
+```{r coins, echo=FALSE, message=FALSE, warning=FALSE}
+coins <- select(responses_anon, coin_same, coin_different) %>% 
+    pivot_longer(cols = c(coin_same, coin_different), names_to = "goal", names_prefix = "coin_", values_to = "side")
+
+coins$goal <- fct_recode(coins$goal, 'Choose same' = "same", 'Choose different' = "different")
+    
+
+```
+
+```{r coins-visualize, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(coins, aes(x="", fill = side)) + 
+    geom_bar(width=.8) +  
+    coord_polar("y", start=0) +
+    geom_label(stat="count", aes(label=stat(count), group=side), 
+               position = position_stack(vjust = .5),
+               show.legend = F,
+               fill="white") +
+    theme_void() +
+    facet_wrap(vars(fct_rev(goal))) +
+    theme(strip.text = element_text(size = 20)) +
+    labs(fill = "Coin side") +
+    scale_fill_manual(values=pal_futurama()(10)[5:7])
+```
+
+
+```{r coins-props, echo=FALSE}
+round(addmargins(proportions(table(fct_rev(coins$goal), coins$side),1)*100,2),2) %>% kable()
+```
+
+
+## Numbers
+
+```{r numbers, include=FALSE}
+numbers <- responses_anon %>% 
+    select(starts_with("number")) %>% 
+    mutate(across(1:2, factor, ordered=T),
+           number_big_fct = factor(number_big, ordered=T)) %>% 
+    na.omit()
+
+```
+
+<span style="color:green">Pick a number 0 to 10. You win if you match your partner.</span>
+
+```{r number-0to10-visualize, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(numbers, aes(x=number_0to10, fill=number_0to10)) + 
+    geom_bar() +
+    #theme_minimal() +
+    labs(title="Match an anonymous partner: select 0-10",
+         y=element_blank(),
+         x=element_blank()) +
+    theme(axis.text.x = element_text(size=24),
+          legend.position = "none") +
+    scale_fill_futurama()
+
+```
+
+
+<span style="color:green">Select a number from the set. You win if you match your partner.</span>
+
+```{r number-selection-visualize, echo=FALSE, message=TRUE, warning=TRUE}
+
+ggplot(numbers, aes(x=number_selection, fill=number_selection)) + 
+    geom_bar() +
+    theme_minimal() +
+    labs(title="Match an anonymous partner: select among these numbers",
+         y=element_blank(),
+         x=element_blank()) +
+    theme(axis.text.x = element_text(size=20),
+          legend.position = "none") +
+    scale_fill_futurama()
+```
+
+
+<span style="color:green">Pick any number. You win if you match your partner, *and* the bigger the number, the more you both win.</span>
+
+```{r number-big-visualize, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(filter(numbers, !is.na(number_big)), aes(x=factor(as.integer(number_big)))) + 
+    geom_bar(aes(fill=factor(as.integer(number_big)))) +
+    #geom_histogram(binwidth = 10) +
+    theme_minimal() +
+    labs(title="Match an anonymous partner: the bigger the better",
+         y=element_blank(),
+         x=element_blank()) +
+    theme(axis.text.x = element_text(size=10, angle=90, hjust=1),
+          legend.position = "none") 
+```
+
