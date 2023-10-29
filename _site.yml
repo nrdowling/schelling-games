@@ -1,4 +1,5 @@
 name: "schelling-games"
+output_dir: "docs"
 navbar:
   title: "Schelling Games"
   left:
