@@ -1,5 +1,10 @@
 name: "schelling-games"
 output_dir: "docs"
+output:
+  html_document:
+    theme:
+      version: 5
+      bootswatch: journal
 navbar:
   title: "Schelling Games"
   left:

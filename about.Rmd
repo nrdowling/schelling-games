@@ -1,5 +1,27 @@
 ---
-title: "About This Website"
+title: "About"
 ---
 
-More about this website.
+# Schelling Games
+
+Thomas Schelling introduced the concept of "focal points" in *The Strategy of Conflict* with the intention of expanding the contemporary perspectives of game theory to include cooperative, not just competitive, games in human decision making **SCHELLING**. Though his work certainty proved influential in this regard, concepts of focal points and coordination games have found relevance well beyond game theory and or economics as a whole. From improvisational music **CANONNE** to urban planning **RONDINELLI**, from human-computer interfacing **WONG ET AL** to linguistic anthropology **BROWN AND LEVINSON**, from social stereotyping **YOON & HOLLINGSHEAD** to online gaming **ROSS AND COLLISTER**, elements of Schelling's framework of coordinated decision-making seem ubiquitous.
+
+
+## Survey design
+
+Schelling's classroom survey asked students questions challenging them to ambiguously "win" a game by coordinating with a stranger. Famously, he asked where and when the participants would meet a stranger in New York City without any prior communication. Additionally, the survey included a series of questions encouraging convergence on a response in more "game-like" circumstances: guessing a number, flipping a coin, etc.
+
+This survey is in essence an abbreviated version of Shelling's. It includes a selection of the "game-like" questions taken directly from Schelling's survey. Because this survey was conducted at the University of Chicago, the where-and-when question asks about meeting a stranger in Chicago rather than New York City. The survey additionally includs two follow-up questions that were not included in Schelling's data, changing the interpersonal context between the participant and hypothetical partner.  
+
+
+## Data analysis
+
+Responses have been cleaned to account for predictable variations in how individuals input popular responses -- e.g., "the reg", "Regenstein", and "In the Reg." are all reported as "The Reg." Ambiguous responses (e.g., "the library") are left ambiguous.
+
+### Exclusions
+
+<!-- TODO: add inline refs for exclusion numbers  -->A total of <span color="red">NUMBER GOES HERE</span> responses to the "meetup location" questions were excluded (out of <span color="red">NUMBER GOES HERE</span> total) or re-coded as "Other".
+
+Responses that indicate clear misunderstanding of the question are excluded. These primarily consisted of responses in the "meeting a stranger" or "meeting a student" questions. Since these questions specify that the other party is unknown to the respondent, responses should not assume prior familiarity or experience with the other party, for example "their house", "the last place we last met", "where we usually see each other", or "where you expect them to be at a certain time."
+
+Responses to the meetup location questions were coded as "Other" if they included multiple locations without rankings (e.g., "pret or hutch"), were overly vague (e.g., "a major center within the city that everyone knows about"), or fanciful/impossible (e.g., "THE MOON!").
