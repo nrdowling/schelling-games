@@ -19,7 +19,7 @@ dorm <- "north|south|\\bMax|burton|dorm|residential|room|island|i\\shouse" # als
 cafe <- "coffee|cafe|dollop|plein|pret|starbucks|amo\\b|Ex\\sL|hallowed" # also included in dining
 residence <- "home|house|dorm|Burton|apartment|they\\slive|north|south|i\\shouse|\\bapt\\b|room|island|max|residen"
 dining <- "coffee|cafe|dollop|plein|\\bbart|shop|restaurant|Ex\\sL|pret|starbucks|baker|dining|\\bmed|amo\\b|hallowed|cathey"
-uc_other <- "quad|UChicago|ratner|hutch|harper|reynold|bookstore|logan|pond|rock.*er" # "rock.*er" catches misspellings of Rockefeller
+uc_other <- "quad|UChicago|ratner|hutch|harper|reynold|bookstore|logan|pond|rock.*?er" # "rock.*er" catches misspellings of Rockefeller
 chi_other <- "hare\\b|\\blake\\b|navy|magnificent|tower|\\bart\\b|loop|station"
 recent <- "\\blast\\b|usual|before|frequent"
 kbg <- "kelly|beecher|kbg" # You might want to define groups that could be useful later, even if you're not currently used in clean_meetup() 

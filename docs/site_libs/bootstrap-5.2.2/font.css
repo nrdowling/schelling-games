@@ -1,14 +1,16 @@
 @font-face {
-  font-family: 'News Cycle';
+  font-family: 'Nunito Sans';
   font-style: normal;
   font-weight: 400;
+  font-stretch: normal;
   font-display: swap;
-  src: url(fonts/CSR64z1Qlv-GDxkbKVQ_TOQ.woff) format('woff');
+  src: url(fonts/a98f7a7574819ba83bec6279a2cecd95.woff) format('woff');
 }
 @font-face {
-  font-family: 'News Cycle';
+  font-family: 'Nunito Sans';
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
+  font-stretch: normal;
   font-display: swap;
-  src: url(fonts/CSR54z1Qlv-GDxkbKVQ_dFsvaNA.woff) format('woff');
+  src: url(fonts/1adeadb2fe618c5ed46221f15e12b9c8.woff) format('woff');
 }

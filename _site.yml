@@ -1,14 +1,22 @@
 name: "schelling-games"
 output_dir: "docs"
-output:
+output: 
   html_document:
+    code_folding: show
+    toc: true
+    bslib: true
     theme:
-      version: 5
-      bootswatch: journal
+      enable-rounded: "TRUE"
+      spacer: "2rem"
+      preset: "lux"
+      secondary: "rgb(180, 33, 75)"
+    css: "custom.css"
 navbar:
   title: "Schelling Games"
   left:
-    - text: "Home"
+    - text: "All Responses"
       href: index.html
+    - text: "MA Only"
+      href: ma.html
     - text: "About"
       href: about.html

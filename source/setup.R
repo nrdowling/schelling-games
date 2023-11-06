@@ -7,10 +7,14 @@
 
 responses <- responses_raw
 
-colnames(responses) <- c('timestamp', 'str_where', 'str_when', 'student_where', 'friend_where', 'coin_same', 'coin_different', 'number_0to10', 'number_selection', 'number_big','str_error','student_error','friend_error')
+colnames(responses) <- c('timestamp', 'str_where', 'str_when', 'student_where', 'friend_where', 'coin_same', 'coin_different', 'number_0to10', 'number_selection', 'number_big', 'uc_status', 'demos', 'language', 'str_error','student_error','friend_error')
 
 responses <- responses %>% 
     mutate(across(ends_with("error"), replace_na, FALSE))
+
+list_cols <- which(sapply(responses,class)=="list")
+responses[,list_cols] <- sapply(responses[,list_cols], as.character)
+
 
 ## ACCOUNT FOR DIFFERENT RESPONDENT GROUPS ##
 

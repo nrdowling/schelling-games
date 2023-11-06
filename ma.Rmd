@@ -1,5 +1,5 @@
 ---
-title: "All Responses"
+title: "MA Student Responses"
 ---
 
 ```{r load-packages, include=FALSE}
@@ -61,6 +61,9 @@ responses_raw <- read_sheet("https://docs.google.com/spreadsheets/d/1A9KzDRgiU6V
 source("source/functions.R")
 source("source/setup.R")
 
+ma.responses <- responses %>% 
+    filter(uc_status %ilike% "MAPSS")
+
 ```
 
 
@@ -90,7 +93,7 @@ You both know that you need to meet each other today, but you haven't agreed on 
 # Select stranger meetup column and add cleaning/grouping
 # Making it into a data.table allows for easy in-text references (it will be both a df and a dt)
 
-str_meetup <- data.table(clean_meetup(responses, "str_where", "str_error"))
+str_meetup <- data.table(clean_meetup(ma.responses, "str_where", "str_error"))
 
 ```
 
@@ -118,7 +121,7 @@ plot_meetup(str_meetup, "str_where_clean")
 # This visually centers 12pm and makes it show even axis ticks instead of odd (since we want 12 to be clear)
 lims <- as.POSIXct(strptime(c("1899-12-29 18:00:00","1899-12-30 18:00:00"), format = "%Y-%m-%d %H:%M:%S")) 
 
-ggplot(filter(responses, !is.na(str_when)), aes(x=str_when)) + 
+ggplot(filter(ma.responses, !is.na(str_when)), aes(x=str_when)) + 
     geom_histogram(binwidth=360) +
     #geom_density(adjust=1/5) +
     #geom_dotplot() +
@@ -129,7 +132,7 @@ ggplot(filter(responses, !is.na(str_when)), aes(x=str_when)) +
     theme_minimal() +
     labs(x = "TIME OF DAY",
          #title = "Meeting a STRANGER in Chicago, WHEN do you go?",
-         subtitle = paste0(nrow(filter(responses,!is.na(str_when))), " total responses"))
+         subtitle = paste0(nrow(filter(ma.responses,!is.na(str_when))), " total responses"))
     
 
 ```
@@ -222,7 +225,7 @@ You both know that you are both UChicago students and that you should meet today
 
 ```{r student-where, include=FALSE}
 
-student_meetup <- data.table(clean_meetup(responses, "student_where", "student_error"))
+student_meetup <- data.table(clean_meetup(ma.responses, "student_where", "student_error"))
 
 ```
 
@@ -299,7 +302,7 @@ You haven't agreed on a meeting location and you have no means of communication.
 
 ```{r friend-where, include=FALSE}
 
-friend_meetup <- data.table(clean_meetup(responses, "friend_where", "friend_error"))
+friend_meetup <- data.table(clean_meetup(ma.responses, "friend_where", "friend_error"))
 
 ```
 
@@ -370,7 +373,7 @@ filter(friend_meetup, friend_where_clean %in% friend_others) %>%
 You and an anonymous partner need to choose heads or tails.
 
 ```{r anon-responses, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-responses_anon <- responses %>% 
+responses_anon <- ma.responses %>% 
     select(coin_same, coin_different, number_0to10, number_selection, number_big) %>% 
     drop_na()
     
