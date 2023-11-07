@@ -64,6 +64,22 @@ source("source/setup.R")
 ma.responses <- responses %>% 
     filter(uc_status %ilike% "MAPSS")
 
+# Quick labels for in-text reference to specific values
+
+str_times <- as.character(filter(ma.responses, !is.na(str_when))$str_when)
+
+on_the_hour <- sum(grepl("*:00:00", str_times))
+
+on_the_thirty <- sum(grepl("*:30:00", str_times))
+
+on_anything_else <- sum(grepl("*:00:00|*:30:00", str_times)==FALSE)
+
+most_pop_time <- as.POSIXct(levels(fct_infreq(str_times))[1])
+
+love_connections <- sum(most_pop_time == str_times)
+
+lonely_hearts <- ifelse(on_anything_else ==1, "person", "people")
+
 ```
 
 
