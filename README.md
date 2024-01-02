@@ -1,5 +1,7 @@
 # schelling-games
 
+I am changing this on the website.
+
 ## Playing Schelling games with UChicago students!
 
 This project imports data from a Google Form where participants play "Schelling games" designed to demonstrate the ability to coordinate in the absence of communication in order to "win" cooperative (vs zero-sum) games.
