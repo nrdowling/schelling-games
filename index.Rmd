@@ -97,7 +97,7 @@ str_meetup <- data.table(clean_meetup(responses, "str_where", "str_error"))
 ::: {.card .m-2}
 ```{r str-visualize-where, echo=FALSE}
 
-# How many levels to display in legend?
+# ?Q?: How many levels display in the legend? Why? Can you change that number in just thisfunction call?
 plot_meetup(str_meetup, "str_where_clean")
 
 #ply_str_where <- ggplotly(gg_str_where)
