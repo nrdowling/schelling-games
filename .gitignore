@@ -35,3 +35,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 schelling-games.Rproj
+# Other
+*.DS_Store
+.DS_Store
