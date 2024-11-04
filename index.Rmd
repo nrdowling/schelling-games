@@ -42,7 +42,7 @@ theme_set(theme_bw())
 # PRO: Most current data
 # CON: Requires appropriate permissions for the google sheet and maintaining settings in the googlesheets4 pkg
 
-responses_raw <- read_sheet("https://docs.google.com/spreadsheets/d/1A9KzDRgiU6VU60b87zNRP7y0YI1hsRRtCvYG_BXvayY/edit?resourcekey#gid=1333159890")
+responses_raw <- read_sheet("https://docs.google.com/spreadsheets/d/1T4XEXNxmb3jK2WenIR9vRXggT_-_8HDejP0J3qeXFqM/edit?gid=716006696#gid=716006696")
 
 # 2. Read intermediary dataset (includes responses from Spring 2020 & Winter 2023)
 # PRO: Data can be publicly accessible and stored in the GitHub repo as a relatively small csv file
