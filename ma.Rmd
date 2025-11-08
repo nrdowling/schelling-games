@@ -42,7 +42,8 @@ theme_set(theme_bw())
 # PRO: Most current data
 # CON: Requires appropriate permissions for the google sheet and maintaining settings in the googlesheets4 pkg
 
-responses_raw <- read_sheet("https://docs.google.com/spreadsheets/d/1A9KzDRgiU6VU60b87zNRP7y0YI1hsRRtCvYG_BXvayY/edit?resourcekey#gid=1333159890")
+gs4_deauth() # Make sure we are not authenticating with any Google account; sheet is publicly viewable
+responses_raw <- read_sheet("https://docs.google.com/spreadsheets/d/1T4XEXNxmb3jK2WenIR9vRXggT_-_8HDejP0J3qeXFqM/edit?gid=716006696#gid=716006696")
 
 # 2. Read intermediary dataset (includes responses from Spring 2020 & Winter 2023)
 # PRO: Data can be publicly accessible and stored in the GitHub repo as a relatively small csv file
@@ -338,7 +339,7 @@ plot_meetup(friend_meetup, "friend_where_clean")
 
 #### Locations (Grouped)
 
-The most common response for where to meet a close UChicago friend in Chicago was `r levels(friend_meetup$friend_where_clean)[1]`, with `r friend_meetup[friend_where_clean==friend_meetup$friend_where_clean[1],.N]` responses (`r round((friend_meetup[friend_where_clean==friend_meetup$friend_where_clean[1],.N]/friend_meetup[,.N])*100,2)`%). By comparison, `r ifelse(str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N]==0, "no respondents", paste0("only ", str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N], " respondents (", round((str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N]/str_meetup[,.N])*100,2), "%)"))` chose to meet a stranger at `r levels(friend_meetup$friend_where_clean)[1]` and `r ifelse(student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N]==0, "no respondents", paste0("only ", student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N], " respondents (", round((student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N]/student_meetup[,.N])*100,2), "%)"))` chose to meet a stranger at `r levels(friend_meetup$friend_where_clean)[1]`.
+The most common response for where to meet a close UChicago friend in Chicago was `r levels(friend_meetup$friend_where_clean)[1]`, with `r friend_meetup[friend_where_clean==friend_meetup$friend_where_clean[1],.N]` responses (`r round((friend_meetup[friend_where_clean==friend_meetup$friend_where_clean[1],.N]/friend_meetup[,.N])*100,2)`%). By comparison, `r ifelse(str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N]==0, "no respondents", paste0("only ", str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N], " respondents (", round((str_meetup[str_where_clean==friend_meetup$friend_where_clean[1],.N]/str_meetup[,.N])*100,2), "%)"))` chose to meet a stranger at `r levels(friend_meetup$friend_where_clean)[1]` and `r ifelse(student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N]==0, "no respondents", paste0("only ", student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N], " respondents (", round((student_meetup[student_where_clean==friend_meetup$friend_where_clean[1],.N]/student_meetup[,.N])*100,2), "%)"))` chose to meet an unknown student at `r levels(friend_meetup$friend_where_clean)[1]`.
 
 While `r levels(str_meetup$str_where_clean)[1]` was the most common response for where to meet a *stranger* in Chicago, `r ifelse(friend_meetup[friend_where_clean==str_meetup$str_where_clean[1],.N]==0, "no respondents", paste0("only ", friend_meetup[friend_where_clean==str_meetup$str_where_clean[1],.N], " respondents (", round((friend_meetup[friend_where_clean==str_meetup$str_where_clean[1],.N]/friend_meetup[,.N])*100,2), "%)"))` chose to meet a close UChicago friend at `r levels(str_meetup$str_where_clean)[1]`.
 

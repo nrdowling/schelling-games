@@ -28,7 +28,9 @@ responses[,list_cols] <- sapply(responses[,list_cols], as.character)
 # February 2nd 2023: Attendees at the SGM lab meeting; primarily psychology graduate students and postdocs
 # February 7th-9th 2023: Undergrads in Mind; most responded in-person on 2/7 but some watched the lecture and responded in the following few days 
 # February 2023 besides the dates above: "testers" who all had experience living and attending/working at UChicago but were otherwise diverse
-
+# November 2023: psychology students in MAPSS Perspectives
+# November 2024: psychology students in MAPSS Perspectives
+# October/November 2025: psychology students in MAPSS Perspectives
 
 
 

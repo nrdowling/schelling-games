@@ -19,10 +19,12 @@ dorm <- "north|south|\\bMax|burton|dorm|residential|room|island|i\\shouse" # als
 cafe <- "coffee|cafe|dollop|plein|pret|starbucks|amo\\b|Ex\\sL|hallowed" # also included in dining
 residence <- "home|house|dorm|Burton|apartment|they\\slive|north|south|i\\shouse|\\bapt\\b|room|island|max|residen"
 dining <- "coffee|cafe|dollop|plein|\\bbart|shop|restaurant|Ex\\sL|pret|starbucks|baker|dining|\\bmed|amo\\b|hallowed|cathey"
+kbg <- "kelly|beecher|green|kbg" # You might want to define groups that could be useful later, even if you're not currently used in clean_meetup() 
+bldg_1155 <- "1155|mapss" # The majority of respondents post-2022 are MAPSS students, which is housed in a building without a name, just an address; some people may refer to it by address or "1155 building" and others may informally call it the "mapss building" or some variation
+uc_academic <- "kelly|beecher|green|kbg|booth|1155|mapss|lab"
 uc_other <- "quad|UChicago|ratner|hutch|harper|reynold|bookstore|logan|pond|rock.*?er" # "rock.*er" catches misspellings of Rockefeller
 chi_other <- "hare\\b|\\blake\\b|navy|magnificent|tower|\\bart\\b|loop|station"
 recent <- "\\blast\\b|usual|before|frequent"
-kbg <- "kelly|beecher|kbg" # You might want to define groups that could be useful later, even if you're not currently used in clean_meetup() 
 
 # Clean any of the meetup location response columns, collapse as directed, and filter out clear errors
 # colErr : name of corresponding boolean column that indicates whether response has been manually marked as an error
@@ -51,12 +53,14 @@ clean_meetup <- function(data, colName, colErr="") {
                              #x %ilike% "\\bart\\b" ~ "Art Institute",
                              x %ilike% "\\bex\\b" ~ "Ex Libris",
                              x %ilike% dining ~ "Other cafe/dining",
+                             x %ilike% bldg_1155 ~ "1155 Building (MAPSS)",
                              x %ilike% bean ~ "The Bean",
                              x %ilike% thereg ~ "The Reg",
                              x %ilike% library ~ "Other library",
                              x %ilike% dorm ~ "Dorms",
                              x %ilike% residence ~ "Other residence",
                              x %ilike% recent ~ "Recent meeting location",
+                             x %ilike% uc_academic ~ "UChicago academic building",
                              x %ilike% uc_other ~ "Other UChicago",
                              x %ilike% chi_other ~ "Other Chicago landmark",
                              TRUE ~ "Other"))
@@ -125,10 +129,12 @@ plot_meetup <- function(data, colName, levDisplay=5, show_n = TRUE, title="", ca
     print(p)
 }
 
+## TODO: replace all kables with gt or other table package that doesn't break for no reason
 
 ### kable_responses() ###
 # Create table/kable of responses
 # Not limited to meetup location responses
+
 
 kbl_responses <- function(data, colName) {
     
